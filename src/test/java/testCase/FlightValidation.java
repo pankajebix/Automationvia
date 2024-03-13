@@ -1,0 +1,37 @@
+package testCase;
+
+import java.io.IOException;
+import org.testng.annotations.DataProvider;
+import org.testng.annotations.Test;
+
+
+
+import PageObject.BookFlight;
+import driver.DataaProvider;
+import driver.Driver;
+
+public class FlightValidation extends Driver {
+	// public WebDriver driver;
+	public Object[][] data;
+
+	@Test(dataProvider = "Data")
+	public void flightvalidate(String rowNumber, String SourceKey, String Sourcestation, String DestinationKey, String Destinationstation,
+			String Date, String FlightName, String SuplierName,String status) throws InterruptedException, IOException {
+
+		BookFlight flights = new BookFlight(driver);
+		flights.enterSource(SourceKey, Sourcestation);
+		// flights.selectSource(Sourcestation);
+		flights.enterDestination(DestinationKey, Destinationstation);
+		flights.enterdate(Date);
+		flights.clicksearch();
+
+		flights.findFlights(SuplierName, FlightName, rowNumber);		
+	}
+
+	@DataProvider(name = "Data")
+	public Object[][] runData() throws IOException {
+		// DataaProvider run = new DataaProvider();	 
+		data = DataaProvider.getData();
+		return data;
+	}
+}
