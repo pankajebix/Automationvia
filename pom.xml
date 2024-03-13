@@ -50,14 +50,6 @@
 			<version>1.6.0</version>
 		</dependency>
 
-		<!-- https://mvnrepository.com/artifact/cn.t/email-util -->
-		<dependency>
-			<groupId>cn.t</groupId>
-			<artifactId>email-util</artifactId>
-			<version>1.0.12.RELEASE</version>
-		</dependency>
-
-
 	</dependencies>
 
 	<build>
