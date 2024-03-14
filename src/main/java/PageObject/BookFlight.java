@@ -1,26 +1,18 @@
 package PageObject;
 
 import java.io.IOException;
-import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.FindBys;
 import org.openqa.selenium.support.PageFactory;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.Wait;
 import org.testng.Assert;
-
 import com.via.constants.AppConstants;
 import com.via.utils.ElementUtil;
 import com.via.utils.ExcelUtil;
 import com.via.utils.JavaScriptUtil;
-
-import org.openqa.selenium.support.ui.WebDriverWait;
 import reusable.ReusableMethods;
 
 public class BookFlight extends ReusableMethods {
@@ -67,6 +59,9 @@ public class BookFlight extends ReusableMethods {
 	@FindBy(xpath = "//a[@class='viaLogo hideFromCustomer']")
 	WebElement modifybutton;
 
+	@FindBy(xpath = "//div[text()='100%']")
+	private WebElement ele100;
+
 	List<String> flightNameArrayList = new ArrayList<String>();
 
 	public void enterSource(String SourceKey, String Sourcestation) {
@@ -75,8 +70,8 @@ public class BookFlight extends ReusableMethods {
 			jsUtil.clickElementByJS(source);
 			source.clear();
 			source.sendKeys(SourceKey);
-			
-			Thread.sleep(2000);
+
+			Thread.sleep(1000);
 
 			for (WebElement selectsource : Sourcelist) {
 				String name = selectsource.getText();
@@ -97,8 +92,8 @@ public class BookFlight extends ReusableMethods {
 			destination.click();
 			destination.clear();
 			destination.sendKeys(key);
-			
-			Thread.sleep(2000);
+
+			Thread.sleep(1000);
 			for (WebElement selectdeparture : departurelist) {
 				if (selectdeparture.getText().contains(Destinationstation)) {
 					selectdeparture.click();
@@ -123,11 +118,14 @@ public class BookFlight extends ReusableMethods {
 
 	public void findFlights(String FlightName, String rowNumber) {
 		try {
+			eleUtil.waitForElementVisible(ele100, AppConstants.DEFAULT_VERY_LONG_TIME_OUT);
+
+		} catch (Exception e) {
+			System.out.println("Issue in BookFlight.findFlights " + e);
+		} finally {
+
 			int j = 0;
 			int flightFound = 0;
-
-			Wait<WebDriver> wait = new WebDriverWait(driver, Duration.ofSeconds(20));
-			wait.until(ExpectedConditions.visibilityOfElementLocated((By.xpath("//div[text()='100%']"))));
 
 			int flightSize = flightName.size();
 			System.out.println("Total Flight Found : " + flightSize);
@@ -135,6 +133,7 @@ public class BookFlight extends ReusableMethods {
 			for (WebElement ele : flightName) {
 				String flightNameText = ele.getText();
 				System.out.println("Flight Name found on UI : " + flightNameText);
+
 				flightNameArrayList.add(j, flightNameText);
 				j++;
 			}
@@ -160,9 +159,7 @@ public class BookFlight extends ReusableMethods {
 				System.out.println("=========================================================");
 			}
 			Assert.assertTrue(flightFound > 0);
-
-		} catch (Exception e) {
-			System.out.println("Issue in BookFlight.findFlights " + e);
 		}
+
 	}
 }
