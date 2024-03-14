@@ -1,6 +1,5 @@
 package reusable;
 
-import java.io.IOException;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
@@ -16,65 +15,60 @@ public class ReusableMethods {
 	public String Month;
 	public String day;
 	public String Date;
-	
+
 	ElementUtil eleUtil;
 	JavaScriptUtil jsUtil;
 
 	public ReusableMethods(WebDriver driver, String Date) {
 		this.driver = driver;
 		this.Date = Date;
-		eleUtil=new ElementUtil(driver);
-		jsUtil=new JavaScriptUtil(driver);
+		eleUtil = new ElementUtil(driver);
+		jsUtil = new JavaScriptUtil(driver);
 	}
 
-	public void selectdate(String Date) throws InterruptedException, IOException {
-		// month year selection
-		// departuredate.click();
-//		ExcelReader reader = new ExcelReader("E:\\Ebix_Workspace\\Automatiovia\\src\\test\\java\\resource\\viadata.xlsx");
-//		String Dateinsheet=reader.getCellData("TestData", "Date", 2);
-		String Dateinsheet = Date;
-		String Dateinsheet1[] = Dateinsheet.split("/");
-		day = Dateinsheet1[0];
-		Month = Dateinsheet1[1];
-		year = Dateinsheet1[2];
+	public void selectdate() {
+		try {
+			String Dateinsheet = Date;
+			String Dateinsheet1[] = Dateinsheet.split("/");
+			day = Dateinsheet1[0];
+			Month = Dateinsheet1[1];
+			year = Dateinsheet1[2];
 
-		String monthyear;
-		Thread.sleep(2000);
-		while (true) {
+			String monthyear;
 
-			Thread.sleep(4000);
-			monthyear = driver.findElement(By.xpath("//span[@class='vc-month-box-head-cell ']")).getText();
+			while (true) {
 
-			// System.out.println(monthyear +"gettext");
-			String arr[] = monthyear.split(" ");
-			String mon = arr[0];
-			String yr = arr[1];
-			// System.out.println(mon);
+				Thread.sleep(1000);
+				monthyear = driver.findElement(By.xpath("//span[@class='vc-month-box-head-cell ']")).getText();
 
-			if (mon.equalsIgnoreCase(Month) && yr.equals(year))
-				break;
-			else
-				Thread.sleep(4000);
-			WebElement ele2=driver.findElement(By.xpath(
-					"//span[@class='vc-month-box-head-cell vc-month-controls icon-Rightarrowthin vc-month-control-active js-next-month']"));
-			eleUtil.waitForElementToBeClickable(AppConstants.DEFAULT_MEDIUM_TIME_OUT, ele2);
-			jsUtil.clickElementByJS(ele2);
-			
-			System.out.println("clicked on arrow");
+				String arr[] = monthyear.split(" ");
+				String mon = arr[0];
+				String yr = arr[1];
 
+				if (mon.equalsIgnoreCase(Month) && yr.equals(year))
+					break;
+				else
+					Thread.sleep(2000);
+				WebElement ele2 = driver.findElement(By.xpath(
+						"//span[@class='vc-month-box-head-cell vc-month-controls icon-Rightarrowthin vc-month-control-active js-next-month']"));
+				eleUtil.waitForElementToBeClickable(AppConstants.DEFAULT_MEDIUM_TIME_OUT, ele2);
+				jsUtil.clickElementByJS(ele2);
+
+				System.out.println("clicked on arrow");
+			}
+
+			Thread.sleep(1000);
+			WebElement date = driver.findElement(By.xpath(
+					"(//div[@class='vc-month-box-container'])[1]//div[not(@class='vc-cell vc-disabled-cell') and @data-date='"
+							+ day + "'] "));
+
+			eleUtil.waitForElementToBeClickable(AppConstants.DEFAULT_MEDIUM_TIME_OUT, date);
+			jsUtil.scrollIntoViewTrue(date);
+			jsUtil.clickElementByJS(date);
+
+		} catch (Exception e) {
+			System.out.println("Issue in ReusableMethods.selectdate " + e);
 		}
-		// "(//div[@class='vc-cell ' and @data-date='"+day+"'])[1]"
-		Thread.sleep(1000);
-		WebElement date = driver.findElement(By.xpath(
-				"(//div[@class='vc-month-box-container'])[1]//div[not(@class='vc-cell vc-disabled-cell') and @data-date='"
-						+ day + "'] "));
-		//date.click();
-		eleUtil.waitForElementToBeClickable(AppConstants.DEFAULT_MEDIUM_TIME_OUT, date);
-		jsUtil.scrollIntoViewTrue(date);
-		jsUtil.clickElementByJS(date);
-
-		// (//div[@class='vc-month-box-container'])[1]//div[@class='vc-cell ' and
-		// @data-date='29']
 	}
 
 }

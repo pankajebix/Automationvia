@@ -13,7 +13,7 @@ import org.openqa.selenium.support.FindBys;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Wait;
-import org.testng.asserts.SoftAssert;
+import org.testng.Assert;
 
 import com.via.constants.AppConstants;
 import com.via.utils.ElementUtil;
@@ -22,18 +22,12 @@ import com.via.utils.JavaScriptUtil;
 
 import org.openqa.selenium.support.ui.WebDriverWait;
 import reusable.ReusableMethods;
-import org.openqa.selenium.JavascriptExecutor;
 
 public class BookFlight extends ReusableMethods {
 
 	public WebDriver driver;
 	public static String date;
-	String fcm;
-	public String lcm;
 
-	public int count;
-	int i = 0;
-	int j = 0;
 	ExcelUtil excUtil = new ExcelUtil(System.getProperty("user.dir") + "\\src\\test\\java\\resource\\viadata.xlsx");
 	ElementUtil eleUtil;
 	JavaScriptUtil jsUtil;
@@ -42,8 +36,8 @@ public class BookFlight extends ReusableMethods {
 		super(driver, date);
 		this.driver = driver;
 		PageFactory.initElements(driver, this);
-		eleUtil=new ElementUtil(driver);
-		jsUtil=new JavaScriptUtil(driver);
+		eleUtil = new ElementUtil(driver);
+		jsUtil = new JavaScriptUtil(driver);
 	}
 
 	@FindBy(xpath = "//input[@id='source']")
@@ -52,7 +46,7 @@ public class BookFlight extends ReusableMethods {
 	@FindBy(xpath = "//input[@id='destination']")
 	WebElement destination;
 
-	@FindBy(xpath = "//li[@class='ui-menu-item']")
+	@FindBys(@FindBy(xpath = "//li[@class='ui-menu-item']"))
 	List<WebElement> Sourcelist;
 
 	@FindBy(xpath = "//li[@class='ui-menu-item']")
@@ -64,68 +58,62 @@ public class BookFlight extends ReusableMethods {
 	@FindBys(@FindBy(xpath = "//div[@class='optsDiv']/preceding-sibling::div[@class='dealDiv'][1]"))
 	List<WebElement> flightcompany;
 
-	@FindBys(@FindBy(xpath = "//div[@class='name js-toolTip']"))
-	List<WebElement> logoname;
+	@FindBys(@FindBy(xpath = "//div[@id='resultFilter']/div/div[@class='filt_typ airlines']/div[@class='filtDataCont']/div/label"))
+	List<WebElement> flightName;
 
 	@FindBy(xpath = "//div[text()='100%']")
 	WebElement hundred;
 
-	// a[@class='viaLogo hideFromCustomer']
-	// a[@class='viaLogo hideFromCustomer']
-	// div[@class='labl modify']//div[@class='modifyCTA']
 	@FindBy(xpath = "//a[@class='viaLogo hideFromCustomer']")
 	WebElement modifybutton;
 
-	List<String> flightcompanyAL = new ArrayList<String>();
-	List<String> logonameAL = new ArrayList<String>();
+	List<String> flightNameArrayList = new ArrayList<String>();
 
-	public void enterSource(String SourceKey, String Sourcestation){
+	public void enterSource(String SourceKey, String Sourcestation) {
 		try {
 			eleUtil.waitForElementToBeClickable(AppConstants.DEFAULT_LONG_TIME_OUT, source);
-			Thread.sleep(1000);
 			jsUtil.clickElementByJS(source);
 			source.clear();
 			source.sendKeys(SourceKey);
-			// Thread.sleep(1000);
-			for (WebElement selectsource : Sourcelist) {
+			
+			Thread.sleep(2000);
 
+			for (WebElement selectsource : Sourcelist) {
 				String name = selectsource.getText();
-				
+
 				if (name.contains(Sourcestation)) {
-					Thread.sleep(2000);
 					selectsource.click();
 				}
 			}
-			
+
 		} catch (Exception e) {
-			System.out.println("Issue in BookFlight.enterSource "+e);
-		}	
+			System.out.println("Issue in BookFlight.enterSource " + e);
+		}
 	}
 
-	public void enterDestination(String key, String Destinationstation){
+	public void enterDestination(String key, String Destinationstation) {
 		try {
 			eleUtil.waitForElementToBeClickable(AppConstants.DEFAULT_LONG_TIME_OUT, destination);
 			destination.click();
 			destination.clear();
 			destination.sendKeys(key);
+			
 			Thread.sleep(2000);
 			for (WebElement selectdeparture : departurelist) {
-
 				if (selectdeparture.getText().contains(Destinationstation)) {
-					Thread.sleep(2000);
 					selectdeparture.click();
 				}
 			}
-			
+
 		} catch (Exception e) {
-			System.out.println("Issue in BookFlight.enterDestination "+e);
+			System.out.println("Issue in BookFlight.enterDestination " + e);
 		}
 	}
 
 	public void enterdate(String date) throws InterruptedException, IOException {
 
 		ReusableMethods rm = new ReusableMethods(driver, date);
-		rm.selectdate(date);
+		rm.selectdate();
 	}
 
 	public void clicksearch() {
@@ -133,55 +121,48 @@ public class BookFlight extends ReusableMethods {
 		jsUtil.clickElementByJS(searchbutton);
 	}
 
-	public void findFlights(String SuplierName, String FlightName, String rowNumber){
+	public void findFlights(String FlightName, String rowNumber) {
 		try {
+			int j = 0;
+			int flightFound = 0;
+
 			Wait<WebDriver> wait = new WebDriverWait(driver, Duration.ofSeconds(20));
 			wait.until(ExpectedConditions.visibilityOfElementLocated((By.xpath("//div[text()='100%']"))));
-			jsUtil.scrollPageDown();
-			Thread.sleep(10000);
 
-			for (WebElement ifc : flightcompany) {
-				fcm = ifc.getText();
-				flightcompanyAL.add(i, fcm);
-				i++;
-			}
+			int flightSize = flightName.size();
+			System.out.println("Total Flight Found : " + flightSize);
 
-			count = flightcompanyAL.size();
-			System.out.println("Total flight found " + count);
-
-			for (WebElement ilc : logoname) {
-				lcm = ilc.getText();
-				logonameAL.add(j, lcm);
+			for (WebElement ele : flightName) {
+				String flightNameText = ele.getText();
+				System.out.println("Flight Name found on UI : " + flightNameText);
+				flightNameArrayList.add(j, flightNameText);
 				j++;
 			}
 
-			int count2 = logonameAL.size();
-			int flightfound = 0;
-			System.out.println("Total logoname found " + count2);
-			SoftAssert sa = new SoftAssert();
-
-			for (int a = 0; a <= count - 1; a++) {
-				if (flightcompanyAL.get(a).contains(SuplierName) && logonameAL.get(a).contains(FlightName)) {
-					flightfound++;
+			for (int i = 0; i < flightSize; i++) {
+				if (flightNameArrayList.get(i).contains(FlightName)) {
+					System.out.println("Given flight name " + FlightName + " is found.");
+					flightFound = flightFound + 1;
+					break;
 				}
 			}
-			Thread.sleep(4000);
+			eleUtil.waitForElementToBeClickable(AppConstants.DEFAULT_MEDIUM_TIME_OUT, modifybutton);
 			modifybutton.click();
-			System.out.println(flightfound);
-			
-			int rowNumberDataUpdate=Integer.parseInt(rowNumber);
-			Thread.sleep(1000);
-			
-				if (flightfound > 0) {
-					excUtil.setCellData("TestData", "Status", rowNumberDataUpdate, "Pass");
-				} else {
-					excUtil.setCellData("TestData", "Status", rowNumberDataUpdate, "Fail");			
+
+			int rowNumberDataUpdate = Integer.parseInt(rowNumber);
+
+			if (flightFound > 0) {
+				excUtil.setCellData("TestData", "Status", rowNumberDataUpdate, "Pass");
+				System.out.println("=========================================================");
+			} else {
+				excUtil.setCellData("TestData", "Status", rowNumberDataUpdate, "Fail");
+				System.out.println("Given flight name " + FlightName + " is not found.");
+				System.out.println("=========================================================");
 			}
-			sa.assertTrue(flightfound > 0, "Number of " + FlightName + flightfound);
-			sa.assertAll();
-			
+			Assert.assertTrue(flightFound > 0);
+
 		} catch (Exception e) {
-			System.out.println("Issue in BookFlight.findFlights "+e);
-		}		
+			System.out.println("Issue in BookFlight.findFlights " + e);
+		}
 	}
 }

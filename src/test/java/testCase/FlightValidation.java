@@ -16,21 +16,20 @@ public class FlightValidation extends Driver {
 
 	@Test(dataProvider = "Data")
 	public void flightvalidate(String rowNumber, String SourceKey, String Sourcestation, String DestinationKey, String Destinationstation,
-			String Date, String FlightName, String SuplierName,String status) throws InterruptedException, IOException {
+			String Date, String FlightName,String status) throws InterruptedException, IOException {
 
 		BookFlight flights = new BookFlight(driver);
 		flights.enterSource(SourceKey, Sourcestation);
-		// flights.selectSource(Sourcestation);
+		
 		flights.enterDestination(DestinationKey, Destinationstation);
 		flights.enterdate(Date);
 		flights.clicksearch();
 
-		flights.findFlights(SuplierName, FlightName, rowNumber);		
+		flights.findFlights(FlightName, rowNumber);		
 	}
 
 	@DataProvider(name = "Data")
-	public Object[][] runData() throws IOException {
-		// DataaProvider run = new DataaProvider();	 
+	public Object[][] runData() throws IOException {	 
 		data = DataaProvider.getData();
 		return data;
 	}

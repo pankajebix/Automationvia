@@ -35,9 +35,4 @@ public class DataaProvider {
 		}
 		return data;
 	}
-
-//	@Test(dataProvider="Data")
-//	public void testcaseData(String SourceKey,String Sourcestation,String DestinationKey,String Destinationstation,String Date,String FlightName,String SuplierName){
-//	System.out.println(SourceKey+Sourcestation);
-//	}
 }

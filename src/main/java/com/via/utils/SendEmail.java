@@ -59,7 +59,7 @@ public class SendEmail {
 			msg.setContent(emailContent);
 
 			Transport.send(msg);
-			System.out.println("Sent message");
+			System.out.println("Sent Email Successfully.");
 		} catch (MessagingException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
