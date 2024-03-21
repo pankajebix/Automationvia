@@ -63,8 +63,19 @@ public class ReusableMethods {
 							+ day + "'] "));
 
 			eleUtil.waitForElementToBeClickable(AppConstants.DEFAULT_MEDIUM_TIME_OUT, date);
-			jsUtil.scrollIntoViewTrue(date);
+			jsUtil.scrollPageDown("40");
+			Thread.sleep(2000);
 			jsUtil.clickElementByJS(date);
+			
+			//=====================
+			Thread.sleep(1000);
+			WebElement dateSecond = driver.findElement(By.xpath(
+					"(//div[@class='vc-month-box-container'])[3]//div[not(@class='vc-cell vc-disabled-cell') and @data-date='"
+							+ day + "'] "));
+
+			eleUtil.waitForElementToBeClickable(AppConstants.DEFAULT_MEDIUM_TIME_OUT, dateSecond);
+			jsUtil.scrollPageDown("40");
+			jsUtil.clickElementByJS(dateSecond);
 
 		} catch (Exception e) {
 			System.out.println("Issue in ReusableMethods.selectdate " + e);
