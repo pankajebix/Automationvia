@@ -152,9 +152,11 @@ public class BookFlight extends ReusableMethods {
 
 			if (flightFound > 0) {
 				excUtil.setCellData("TestData", "Status", rowNumberDataUpdate, "Pass");
+				excUtil.fillBackgroundCellColorGreen("TestData", rowNumberDataUpdate,6);
 				System.out.println("=========================================================");
 			} else {
 				excUtil.setCellData("TestData", "Status", rowNumberDataUpdate, "Fail");
+				excUtil.fillBackgroundCellColorRed("TestData", rowNumberDataUpdate,6);
 				System.out.println("Given flight name " + FlightName + " is not found.");
 				System.out.println("=========================================================");
 			}

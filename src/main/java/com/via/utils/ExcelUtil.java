@@ -5,9 +5,12 @@ import java.io.FileOutputStream;
 import java.util.Calendar;
 
 import org.apache.poi.ss.usermodel.DateUtil;
+import org.apache.poi.ss.usermodel.FillPatternType;
+import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 import org.apache.poi.xssf.usermodel.XSSFCreationHelper;
+import org.apache.poi.xssf.usermodel.XSSFFont;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -20,6 +23,7 @@ public class ExcelUtil {
 	private XSSFSheet sheet = null;
 	private XSSFRow row = null;
 	private XSSFCell cell = null;
+	private XSSFCellStyle style=null;
 
 	public ExcelUtil(String path) {
 
@@ -369,6 +373,70 @@ public class ExcelUtil {
 			}
 		}
 		return -1;
+	}
+	
+	public void fillBackgroundCellColorRed(String sheetName, int rowNumber, int columnNumber) {
+		try {
+			fis = new FileInputStream(path);
+			workbook = new XSSFWorkbook(fis);
+			sheet = workbook.getSheet(sheetName);
+	         
+	         XSSFFont font = workbook.createFont();
+	         style = workbook.createCellStyle();
+	         
+	         row = sheet.getRow(rowNumber-1);
+	         cell = row.getCell(columnNumber+1);
+        
+	         // Background color	         
+
+	         font.setColor(IndexedColors.BLACK.getIndex());    
+	         style.setFont(font);
+	         
+	         style.setFillForegroundColor(IndexedColors.RED.getIndex());
+	         style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+	  
+	         cell.setCellStyle(style);
+	         //cell.setCellValue("fail");
+         
+	        fileOut = new FileOutputStream(path);
+			workbook.write(fileOut);
+			fileOut.close();
+			
+		} catch (Exception e) {
+			System.err.println("Issue in ExcelUtil.fillBackgroundCellColorRed "+e);
+		}
+	}
+	
+	public void fillBackgroundCellColorGreen(String sheetName, int rowNumber, int columnNumber) {
+		try {
+			fis = new FileInputStream(path);
+			workbook = new XSSFWorkbook(fis);
+			sheet = workbook.getSheet(sheetName);
+	         
+	         XSSFFont font = workbook.createFont();
+	         style = workbook.createCellStyle();
+	         
+	         row = sheet.getRow(rowNumber-1);
+	         cell = row.getCell(columnNumber+1);
+        
+	         // Background color	         
+
+	         font.setColor(IndexedColors.BLACK.getIndex());    
+	         style.setFont(font);
+	         
+	         style.setFillForegroundColor(IndexedColors.BRIGHT_GREEN.getIndex());
+	         style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+	  
+	         cell.setCellStyle(style);
+	         //cell.setCellValue("fail");
+         
+	        fileOut = new FileOutputStream(path);
+			workbook.write(fileOut);
+			fileOut.close();
+			
+		} catch (Exception e) {
+			System.err.println("Issue in ExcelUtil.fillBackgroundCellColorRed "+e);
+		}
 	}
 
 }
