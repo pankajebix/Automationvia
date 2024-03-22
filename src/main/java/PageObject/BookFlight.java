@@ -61,11 +61,17 @@ public class BookFlight extends ReusableMethods {
 
 	@FindBy(xpath = "//div[text()='100%']")
 	private WebElement ele100;
+	
+	@FindBy(xpath = "//div[@class='one-way']/label")
+	private WebElement oneWayEle;
 
 	List<String> flightNameArrayList = new ArrayList<String>();
 
 	public void enterSource(String SourceKey, String Sourcestation) {
 		try {
+			eleUtil.waitForElementToBeClickable(AppConstants.DEFAULT_LONG_TIME_OUT, oneWayEle);
+			jsUtil.clickElementByJS(oneWayEle);
+			
 			eleUtil.waitForElementToBeClickable(AppConstants.DEFAULT_LONG_TIME_OUT, source);
 			jsUtil.clickElementByJS(source);
 			source.clear();
@@ -153,11 +159,13 @@ public class BookFlight extends ReusableMethods {
 			if (flightFound > 0) {
 				excUtil.setCellData("TestData", "Status", rowNumberDataUpdate, "Pass");
 				excUtil.fillBackgroundCellColorGreen("TestData", rowNumberDataUpdate,6);
+				excUtil.setCellData("TestData", "Flight Found", rowNumberDataUpdate, flightNameArrayList.toString());
 				System.out.println("=========================================================");
 			} else {
 				excUtil.setCellData("TestData", "Status", rowNumberDataUpdate, "Fail");
 				excUtil.fillBackgroundCellColorRed("TestData", rowNumberDataUpdate,6);
 				System.out.println("Given flight name " + FlightName + " is not found.");
+				excUtil.setCellData("TestData", "Flight Found", rowNumberDataUpdate, flightNameArrayList.toString());
 				System.out.println("=========================================================");
 			}
 			Assert.assertTrue(flightFound > 0);

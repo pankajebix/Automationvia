@@ -16,7 +16,7 @@ public class FlightValidation extends Driver {
 
 	@Test(dataProvider = "Data")
 	public void flightvalidate(String rowNumber, String SourceKey, String Sourcestation, String DestinationKey, String Destinationstation,
-			String Date, String FlightName,String status) throws InterruptedException, IOException {
+			String Date, String FlightName,String status, String flightFoundList) throws InterruptedException, IOException {
 
 		BookFlight flights = new BookFlight(driver);
 		flights.enterSource(SourceKey, Sourcestation);

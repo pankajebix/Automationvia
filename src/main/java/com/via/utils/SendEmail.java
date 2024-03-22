@@ -45,7 +45,7 @@ public class SendEmail {
 
 			// Text body part
 			MimeBodyPart textBodyPart = new MimeBodyPart();
-			textBodyPart.setText("Hi, Execution is successfuly. Please find the attached file of test report.\\n\\nNote : This Email is sent by Automation Test script after post test suite.");
+			textBodyPart.setText("Hi, Execution is successfuly. Please find the attached file of test report.\n\nNote : This Email is sent by Automation Test script after post test suite.");
 
 			// Attachment body part.
 			MimeBodyPart pdfAttachment = new MimeBodyPart();
